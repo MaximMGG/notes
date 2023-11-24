@@ -43,5 +43,6 @@ void show_screen();
 
 void resetWindow(WINDOW *win, NOTE *note);
 
+void refreshCurs();
 
 #endif // _NOTE_

@@ -35,15 +35,18 @@ int main() {
             case 'j':
             case KEY_DOWN: {
                     moveCursore(note, DOWN); 
+                    refreshCurs();
                     break;
                  }
             case 'k':
             case KEY_UP: {
                     moveCursore(note, UP); 
+                    refreshCurs();
                     break;
                  }
             case 'c' :{
                     char *buf = readLineForNote();
+                    create_note(note, buf);
                     resetWindow(stdscr, note);
                  }
         } 
@@ -57,7 +60,7 @@ int main() {
 void print_note(NOTE *note) {
     int y = 1;
     for (int i = 0; i < note->note_count; i++) {
-        mvaddstr(y, 1, note->notes[i]->note_name);
+        mvaddstr(y, 2, note->notes[i]->note_name);
         y++;
         if (note->notes[i]->open) {
             for(int j = 0; j < note->notes[i]->len_of_content; j++) {
@@ -82,11 +85,11 @@ void create_note(NOTE *note, char *note_content) {
         note->notes = realloc(note->notes, sizeof(note->notes) * 20);
     }
 
-
-
     note->notes[note->note_count] = malloc(sizeof(*(note->notes[note->note_count]))); 
     note->notes[note->note_count]->note_name = malloc(sizeof(char) * strlen(note_content));
+    note->notes[note->note_count]->open = false;
     strcpy(note->notes[note->note_count++]->note_name, note_content);
+
 }
 
 
@@ -111,12 +114,24 @@ char *readLineForNote() {
     wmove(tmp, 1, 1);
     char *buffer = malloc(sizeof(char) * 200);
     int i = 0;
+    
+    y = 1;
+    x = 1;
 
     int ch;
     while((ch = wgetch(tmp)) != '\n') {
+        if (ch == 127) {
+           mvwaddch(tmp, y, x, ' '); 
+           mvwaddch(tmp, y, x + 1, ' '); 
+           mvwaddch(tmp, y, --x, ' '); 
+           wmove(tmp, y, x);
+           buffer[--i] = ' ';
+           continue;
+        }
         buffer[i++] = ch;
+        x++;
     }
-    buffer[i] = '\0';
+    buffer[i + 1] = '\0';
 
     wrefresh(tmp);
 
@@ -136,3 +151,6 @@ void resetWindow(WINDOW *win, NOTE *note) {
     wrefresh(win);
 }
 
+void refreshCurs() {
+    wrefresh(stdscr); 
+}

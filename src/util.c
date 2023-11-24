@@ -39,16 +39,18 @@ char *str_concat(char *first, char *second, char symbol) {
 
 
 void moveCursore(NOTE *note ,char where) {
-    if (note->cury <= 1 || note->cury >= note->maxy - 1) {
-        return;
-    }
-    mvaddch(note->cury, note->curx, ' ');     
     if (where == UP) {
+        if (note->cury <= 1) return;
+
+        mvaddch(note->cury, note->curx, ' ');     
         mvaddch(--note->cury, note->curx, '>');
     } else {
+        if (note->cury >= note->maxy) return;
+
         if (note->cury >= check_note_len(note)) {
             return;
         }
+        mvaddch(note->cury, note->curx, ' ');     
         mvaddch(++note->cury, note->curx, '>');
     }
 }
