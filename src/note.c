@@ -1,6 +1,6 @@
 #include "../header/note.h"
 #include "../header/util.h"
-#include "../header/textworc.h"
+#include "../header/textwork.h"
 #include <stdlib.h>
 
 
@@ -13,10 +13,11 @@ int main() {
     noecho();
     box(stdscr, 0, 0);
 
-    NOTE *note = malloc(sizeof(*note));
+    NOTE *note = getNote();
 
     note->cury = 1;
     note->curx = 1;
+
     mvaddch(note->cury, note->curx, '>');
     
 
@@ -60,4 +61,28 @@ void print_note(NOTE *note) {
         }
     }
 }
+
+
+void create_note(NOTE *note, char *note_content) {
+    if (note->note_count == 0) {
+
+    }
+
+
+
+    note->notes[note->note_count] = malloc(sizeof(*(note->notes[note->note_count]))); 
+    note->notes[note->note_count]->note_name = malloc(sizeof(char) * strlen(note_content));
+    strcpy(note->notes[note->note_count++]->note_name, note_content);
+}
+
+
+void create_child_note(NOTE *note, char *note_name, char *note_content) {
+    for(int i = 0; i < note->note_count; i++) {
+        if (!strcmp(note->notes[i]->note_name, note_name)) {
+
+        }
+    } 
+}
+
+
 

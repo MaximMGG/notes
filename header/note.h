@@ -1,6 +1,7 @@
 #ifndef _NOTE_
 #define _NOTE_
 #include <ncurses.h>
+#include <string.h>
 
 typedef struct s_notes_m {
     char *note_name;
