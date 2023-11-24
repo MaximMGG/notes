@@ -1,6 +1,7 @@
 #include "../header/note.h"
 #include "../header/util.h"
 #include "../header/textwork.h"
+#include <ncurses.h>
 #include <stdlib.h>
 
 
@@ -14,6 +15,10 @@ int main() {
     box(stdscr, 0, 0);
 
     NOTE *note = getNote();
+    if (note->note_count == 0) {
+        mvaddstr(2, 30, "enter c for creating notes");
+        show_screen();
+    }
 
     note->cury = 1;
     note->curx = 1;
@@ -39,6 +44,7 @@ int main() {
                  }
             case 'c' :{
                     char *buf = readLineForNote();
+                    resetWindow(stdscr, note);
                  }
         } 
     }
@@ -61,6 +67,10 @@ void print_note(NOTE *note) {
             continue;
         }
     }
+    note->cury = 1;
+    note->curx = 1;
+    mvaddch(1, 1, '>');
+    box(stdscr, 0, 0);
 }
 
 
@@ -91,7 +101,38 @@ void create_child_note(NOTE *note, char *note_name, char *note_content) {
 
 //TODO (Maxim) write func read name of note 
 char *readLineForNote() {
-    WINDOW *tmp = newwin(10, 120, )
+    int x, y;
+    getmaxyx(stdscr, y, x);
+    WINDOW *tmp = newwin(10, 120, y - 20, 5);
+    echo();
+    box(tmp, 0, 0);
+    wrefresh(tmp);
+
+    wmove(tmp, 1, 1);
+    char *buffer = malloc(sizeof(char) * 200);
+    int i = 0;
+
+    int ch;
+    while((ch = wgetch(tmp)) != '\n') {
+        buffer[i++] = ch;
+    }
+    buffer[i] = '\0';
+
+    wrefresh(tmp);
+
+    noecho();
+    delwin(tmp);
+
+    return buffer;
 }
 
+void show_screen() {
+    wrefresh(stdscr);
+}
+
+void resetWindow(WINDOW *win, NOTE *note) {
+    wclear(win);
+    print_note(note);
+    wrefresh(win);
+}
 

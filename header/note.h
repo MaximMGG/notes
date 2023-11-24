@@ -38,4 +38,10 @@ void delete_note(NOTE *note, int pos);
 void open_note(NOTE *note);
 
 void print_note(NOTE *note);
+
+void show_screen();
+
+void resetWindow(WINDOW *win, NOTE *note);
+
+
 #endif // _NOTE_
