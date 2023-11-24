@@ -5,7 +5,7 @@
 
 typedef struct s_notes_m {
     char *note_name;
-    char **note_content;
+    char **content;
     unsigned int len_of_content;
     char open;
     unsigned int lay;

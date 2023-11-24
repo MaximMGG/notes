@@ -1,5 +1,17 @@
 #include "../header/util.h"
 
+char *str_substring(char *tmp, unsigned int from, unsigned int to) {
+
+    char *buf = malloc(sizeof(char) * (to - from + 2));
+
+    for(int i = from, j = 0; i <= to; i++, j++) {
+        buf[j] = tmp[i];
+        if(tmp[i] == '\0') {
+            break;
+        }
+    }
+    return buf;
+}
 
 
 

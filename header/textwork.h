@@ -8,4 +8,4 @@
 
 NOTE *getNote();
 
-char **parsNoteNot(FILE *f);
+char **parsNoteNot(FILE *f, int *len);

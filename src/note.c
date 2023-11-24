@@ -52,7 +52,7 @@ void print_note(NOTE *note) {
         y++;
         if (note->notes[i]->open) {
             for(int j = 0; j < note->notes[i]->len_of_content; j++) {
-                mvaddstr(y, 3, note->notes[i]->note_content[j]);
+                mvaddstr(y, 3, note->notes[i]->content[j]);
                 y++;
             }
             continue;
@@ -80,7 +80,8 @@ void create_note(NOTE *note, char *note_content) {
 void create_child_note(NOTE *note, char *note_name, char *note_content) {
     for(int i = 0; i < note->note_count; i++) {
         if (!strcmp(note->notes[i]->note_name, note_name)) {
-
+            note->notes[i]->content[note->notes[i]->len_of_content] = malloc(sizeof(char) * strlen(note_content));
+            strcpy(note->notes[i]->content[note->notes[i]->len_of_content++], note_content);
         }
     } 
 }
