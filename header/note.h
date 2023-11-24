@@ -25,6 +25,9 @@ typedef struct s_notes {
 
 } NOTE;
 
+char *readLineForNote();
+
+int check_note_len(NOTE *note);
 
 void create_note(NOTE *note, char *note_content);
 

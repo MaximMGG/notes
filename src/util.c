@@ -46,6 +46,21 @@ void moveCursore(NOTE *note ,char where) {
     if (where == UP) {
         mvaddch(--note->cury, note->curx, '>');
     } else {
+        if (note->cury >= check_note_len(note)) {
+            return;
+        }
         mvaddch(++note->cury, note->curx, '>');
     }
+}
+
+int check_note_len(NOTE *note) {
+    int count = note->note_count;
+
+    for(int i = 0; i < note->note_count; i++) {
+        if (note->notes[i]->open == true) {
+            count += note->notes[i]->len_of_content;
+        }
+    }
+
+    return count;
 }

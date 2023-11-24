@@ -37,6 +37,9 @@ int main() {
                     moveCursore(note, UP); 
                     break;
                  }
+            case 'c' :{
+                    char *buf = readLineForNote();
+                 }
         } 
     }
 
@@ -86,5 +89,9 @@ void create_child_note(NOTE *note, char *note_name, char *note_content) {
     } 
 }
 
+//TODO (Maxim) write func read name of note 
+char *readLineForNote() {
+    WINDOW *tmp = newwin(10, 120, )
+}
 
 
