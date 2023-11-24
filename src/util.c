@@ -2,6 +2,30 @@
 
 
 
+
+
+char *str_concat(char *first, char *second, char symbol) {
+    char *buf = malloc(sizeof(char) * (strlen(first) + strlen(second)));
+    int i, j;
+    for(i = 0; ;i++) {
+        buf[i] = first[i];
+        if (first[i] == '\0') break;
+    }
+
+    if (symbol != 0) {
+        buf[i++] = symbol;
+    }
+
+    for(j = 0; ;j++, i++) {
+        buf[i] = second[j];
+        if (second[j] == '\0') {
+            break;
+        }
+    }
+    return buf;
+}
+
+
 void moveCursore(NOTE *note ,char where) {
     if (note->cury <= 1 || note->cury >= note->maxy - 1) {
         return;

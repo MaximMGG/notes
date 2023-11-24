@@ -8,12 +8,14 @@ typedef struct s_notes_m {
     char **note_content;
     unsigned int len_of_content;
     char open;
+    unsigned int lay;
 } note_c;
 
 
 typedef struct s_notes {
     note_c **notes;
     unsigned int note_count;
+    unsigned int note_size;
 
     unsigned short curx;
     unsigned short cury;

@@ -40,8 +40,6 @@ int main() {
         } 
     }
 
-
-
     endwin();
     return 0;
 }
@@ -65,7 +63,10 @@ void print_note(NOTE *note) {
 
 void create_note(NOTE *note, char *note_content) {
     if (note->note_count == 0) {
-
+        note->notes = malloc(sizeof(note->notes) * 20);
+    }
+    if (note->note_count == 20) {
+        note->notes = realloc(note->notes, sizeof(note->notes) * 20);
     }
 
 
