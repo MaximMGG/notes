@@ -36,6 +36,11 @@ typedef struct s_note {
     int cury;
     int curx;
 
+    int from;
+    int to;
+
+    unsigned int total_len;
+
 } NOTE;
 
 // initialize note, if file on disk apty just create empy note;
@@ -59,8 +64,6 @@ void delte_content(NOTE *note, char *note_name, unsigned int pos);
 //cast all notes and content to char ** for disk writing
 char **prepare_content_for_disk(NOTE *note);
 
-//return total count of all notes and content
-int total_note_len(NOTE *note);
 
 
 

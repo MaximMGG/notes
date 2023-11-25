@@ -9,9 +9,13 @@ NOTE *init_note() {
 
     new->note_len = 0;
     new->note_maxsize = 20;
+    new->total_len = 0;
 
     new->cury = 1;
     new->curx = 1;
+
+    new->from = 0;
+    new->to = 0;
 
     new->content = malloc(sizeof(n_content *) * new->note_maxsize);
 
@@ -23,6 +27,8 @@ NOTE *init_note() {
         return new;
     }
     set_note_from_disk(new, content, &size);
+
+    new->to = new->total_len;
 
     return new;
 }
@@ -63,6 +69,7 @@ void add_note(NOTE *note, char *note_name) {
     }
 
     note->content[note->note_len - 1]->open = FALSE;
+    note->total_len++;
 
 }
 
@@ -81,6 +88,7 @@ void add_notecontent(NOTE *note, char *note_name, char *content) {
             break;
         }
     }
+    note->total_len++;
 }
 
 //delete note with name note_name
@@ -91,8 +99,7 @@ void delte_content(NOTE *note, char *note_name, unsigned int pos);
 
 
 char **prepare_content_for_disk(NOTE *note) {
-    int total_len = total_note_len(note);
-    char **content = malloc(sizeof(char *) * total_len);
+    char **content = malloc(sizeof(char *) * note->total_len);
     int j = 0;
 
     for(int i = 0; i < note->note_len; i++) {
@@ -106,11 +113,3 @@ char **prepare_content_for_disk(NOTE *note) {
     return content;
 }
 
-int total_note_len(NOTE *note) {
-    int count = note->note_len;
-    
-    for(int i = 0; i < note->note_len; i++) {
-        count += note->content[i]->cont_len;
-    }
-    return count;
-}
