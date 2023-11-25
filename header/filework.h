@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "str.h"
 
 #ifndef _FILE_WORK_
 #define _FILE_WORK_
@@ -8,7 +11,7 @@
 char **get_note_from_file(char *path, unsigned int *size);
 
 //save note content in file note.not
-int save_note_in_file(char **content);
+int save_note_in_file(char *path, char **content, int size);
 
 
 #endif
