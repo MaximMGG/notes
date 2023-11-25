@@ -51,6 +51,8 @@ void move_curs(NOTE *note, char direction) {
 
         if (note->from > 0 && note->cury <= 8) {
             note->from--;
+            reset_win(note);
+            print_content(note);
             return;
         } else if (note->from > 0 && note->cury > 8) {
             mvaddch(note->cury--, note->curx, ' ');
@@ -66,6 +68,8 @@ void move_curs(NOTE *note, char direction) {
 
         if (note->cury >= note->maxy - 8 && note->open_content - note->from > note->maxy) {
             note->from++;
+            reset_win(note);
+            print_content(note);
             return;
         } else if (note->cury >= note->maxy - 8) {
             mvaddch(note->cury++, note->curx, ' ');

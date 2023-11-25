@@ -129,3 +129,35 @@ int get_open_content(NOTE *note) {
     return count;
 }
 
+
+//if note open == true -> set false and opozite
+void set_note_open(NOTE *note) {
+    int index = get_note_on_curs(note);
+    if (note->content[index]->open == TRUE)
+        note->content[index]->open = FALSE;
+    else 
+        note->content[index]->open = TRUE;
+    }
+
+//return index of note on cury position
+int get_note_on_curs(NOTE *note) {
+    int count = 1;
+    for(int i = 0; note->note_len; i++) {
+        if (note->cury == count) {
+            return i;
+        }
+        count++;
+
+        if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
+
+            for(int j = 0; j < note->content[i]->cont_len; j++) {
+                if (note->cury == count) {
+                    return i;
+                }
+                count++;
+            }
+
+        }
+    }
+    return -1;
+}

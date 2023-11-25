@@ -65,7 +65,14 @@ void delte_content(NOTE *note, char *note_name, unsigned int pos);
 //cast all notes and content to char ** for disk writing
 char **prepare_content_for_disk(NOTE *note);
 
+//return sum of all open notes
 int get_open_content(NOTE *note);
+
+//if note open == true -> set false and opozite
+void set_note_open(NOTE *note);
+
+//return index of note on cury position
+int get_note_on_curs(NOTE *note);
 
 
 #endif //_NOTE_

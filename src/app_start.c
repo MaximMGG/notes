@@ -20,17 +20,38 @@ int main() {
     NOTE *note = init_note();
     getmaxyx(stdscr, note->maxy, note->maxx);
 
-    if (note->note_len == 0) {
-        mvaddstr(note->maxy - 1, note->maxx / 2 - 4, "Enter c for creating note");
-        refresh();
-    }
 
     mvaddch(1, 1, '>');
 
     print_content(note);
     show_win(stdscr);
 
+    if (note->note_len == 0) {
+        mvaddstr(note->maxy - 1, note->maxx / 2 - 4, "Enter c for creating note");
+        refresh();
+    }
+
     while((ch = getch()) != KEY_F(1)) {
+        switch (ch) {
+            case 'j':
+            case KEY_DOWN: {
+                    move_curs(note, DOWN); 
+                    show_win(stdscr);
+                 }
+            case 'k':
+            case KEY_UP: {
+                    move_curs(note, UP); 
+                    show_win(stdscr);
+                 }
+            case '\n': {
+                    set_note_open(note);
+                    get_open_content(note);
+                    reset_win(note);
+                 }
+            case 'c': {
+                    add_note(note, "");
+                 }
+        }
 
 
 
