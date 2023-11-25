@@ -16,14 +16,12 @@ int main() {
     keypad(stdscr, TRUE);
     curs_set(0);
     box(stdscr, 0, 0);
-    int y, x;
-    getmaxyx(stdscr, y, x);
-
 
     NOTE *note = init_note();
+    getmaxyx(stdscr, note->maxy, note->maxx);
 
     if (note->note_len == 0) {
-        mvaddstr(y - 1, x / 2 - 4, "Enter c for creating note");
+        mvaddstr(note->maxy - 1, note->maxx / 2 - 4, "Enter c for creating note");
         refresh();
     }
 

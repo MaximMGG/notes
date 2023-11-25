@@ -40,6 +40,7 @@ typedef struct s_note {
     int to;
 
     unsigned int total_len;
+    unsigned int open_content;
 
 } NOTE;
 
@@ -64,7 +65,7 @@ void delte_content(NOTE *note, char *note_name, unsigned int pos);
 //cast all notes and content to char ** for disk writing
 char **prepare_content_for_disk(NOTE *note);
 
-
+int get_open_content(NOTE *note);
 
 
 #endif //_NOTE_

@@ -10,12 +10,16 @@ NOTE *init_note() {
     new->note_len = 0;
     new->note_maxsize = 20;
     new->total_len = 0;
+    new->open_content = 0;
 
     new->cury = 1;
     new->curx = 1;
 
     new->from = 0;
     new->to = 0;
+
+    new->maxy = 0;
+    new->maxx = 0;
 
     new->content = malloc(sizeof(n_content *) * new->note_maxsize);
 
@@ -111,5 +115,17 @@ char **prepare_content_for_disk(NOTE *note) {
         }
     }
     return content;
+}
+
+//TODO (Maxim) need to use only when notes opens or closes
+int get_open_content(NOTE *note) {
+    int count = note->note_len;
+    for(int i = 0; i < note->note_len; i++) {
+        if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
+            count += note->content[i]->cont_len;
+        }
+    }
+    note->open_content = count;
+    return count;
 }
 
