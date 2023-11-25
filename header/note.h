@@ -15,7 +15,7 @@
 
 
 typedef struct s_content {
-    char *node_name;
+    char *note_name;
     char **cont;
     unsigned int cont_len;
     unsigned int cont_maxsize;
