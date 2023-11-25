@@ -28,14 +28,27 @@ NOTE *init_note() {
 }
 
 void set_note_from_disk(NOTE *note, char **content) {
-
+    
 }
 
 //add note 
-void add_note(NOTE *note, char *note_name);
+void add_note(NOTE *note, char *note_name) {
+    note->content[note->note_len] = malloc(sizeof(n_content *));
+    mem_cpy(note->content[note->note_len++]->node_name, note_name, 
+                                                    str_len(note_name));
+    
+    if (note->note_len >= note->note_maxsize) {
+        note->note_maxsize <<= 1;
+        note->content = realloc(note->content, 
+                        sizeof(note->content) * note->note_maxsize);
+    }
+
+}
 
 //add content in note_name note
-void add_notecontent(NOTE *note, char *note_name, char *content);
+void add_notecontent(NOTE *note, char *note_name, char *content) {
+
+}
 
 //delete note with name note_name
 void delete_note(NOTE *note, char *note_name);

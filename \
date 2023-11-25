@@ -66,27 +66,8 @@ void mem_cpy(char *target, char *from, unsigned int size) {
         b_f = (unsigned char *) p_f;
     } else {
         b_t = (unsigned char *) target;
-        b_t = (unsigned char *) from;
     }
 
-    for(int i = 0; i < les; i++) {
-        *(b_t)++ = *(b_f)++;
-    }
+
+
 }
-
-
-char str_cmp(const char *first, const char *second) {
-
-    for(int i = 0; ; i++) {
-        if (first[i] != second[i]) {
-            return 0;
-        }
-
-        if (first[i] == '\0' && second[i] == '\0') {
-            return 1;
-        }
-    }
-
-    return 1;
-}
-
