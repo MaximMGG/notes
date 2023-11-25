@@ -22,13 +22,28 @@ NOTE *init_note() {
     if (content == NULL) {
         return new;
     }
-    set_note_from_disk(new, content);
+    set_note_from_disk(new, content, &size);
 
     return new;
 }
 
-void set_note_from_disk(NOTE *note, char **content) {
-    
+void set_note_from_disk(NOTE *note, char **content, unsigned int *size) {
+    for (int i = 0; i < *size; i++) {
+         if(content[i][0] == '-' && content[i][1] != '-') {
+            add_note(note, content[i]);
+         }
+         if(content[i][0] == '-' && content[i][1] == '-') {
+             char *note_name = content[i - 1];
+             for(; ; i++) {
+                if (content[i][0] == '-' && content[i][1] != '-') {
+                    i--;
+                    break;
+                }
+                add_notecontent(note, note_name, content[i]);
+             }
+
+         }
+    }
 }
 
 //add note 
@@ -74,3 +89,28 @@ void delete_note(NOTE *note, char *note_name);
 //delete content from note is pos position
 void delte_content(NOTE *note, char *note_name, unsigned int pos);
 
+
+char **prepare_content_for_disk(NOTE *note) {
+    int total_len = total_note_len(note);
+    char **content = malloc(sizeof(char *) * total_len);
+    int j = 0;
+
+    for(int i = 0; i < note->note_len; i++) {
+        mem_cpy(content[j++], str_concat("-", note->content[i]->note_name, 0), str_len(note->content[i]->note_name));
+        if (note->content[i]->cont_len > 0) {
+            for(int k = 0; k < note->content[i]->cont_len; k++) {
+                mem_cpy(content[j++], str_concat("--", note->content[i]->cont[k], 0), str_len(note->content[i]->cont[k]));
+            }
+        }
+    }
+    return content;
+}
+
+int total_note_len(NOTE *note) {
+    int count = note->note_len;
+    
+    for(int i = 0; i < note->note_len; i++) {
+        count += note->content[i]->cont_len;
+    }
+    return count;
+}

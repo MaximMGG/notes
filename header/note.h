@@ -42,7 +42,7 @@ typedef struct s_note {
 NOTE *init_note();
 
 //fill NOTE from note.not file
-void set_note_from_disk(NOTE *note, char **content);
+void set_note_from_disk(NOTE *note, char **content, unsigned int *size);
 
 //add note 
 void add_note(NOTE *note, char *note_name);
@@ -56,6 +56,11 @@ void delete_note(NOTE *note, char *note_name);
 //delete content from note is pos position
 void delte_content(NOTE *note, char *note_name, unsigned int pos);
 
+//cast all notes and content to char ** for disk writing
+char **prepare_content_for_disk(NOTE *note);
+
+//return total count of all notes and content
+int total_note_len(NOTE *note);
 
 
 
