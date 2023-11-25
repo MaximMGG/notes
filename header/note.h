@@ -1,48 +1,56 @@
+#include <ncurses.h>
+#include "str.h"
+#include "filework.h"
+
 #ifndef _NOTE_
 #define _NOTE_
-#include <ncurses.h>
-#include <string.h>
 
-typedef struct s_notes_m {
-    char *note_name;
-    char **content;
-    unsigned int len_of_content;
-    char open;
-    unsigned int lay;
-} note_c;
+#define HOME "/home/";
+#define NOTE_NOT "/.local/share/note/note.not";
+
+#define GET_PATH(b) str_concat(str_concat(HOME, b, 0), NOTE_NOT, 0) 
 
 
-typedef struct s_notes {
-    note_c **notes;
-    unsigned int note_count;
-    unsigned int note_size;
+typedef struct s_content {
+    char *node_name;
+    char **cont;
+    unsigned int cont_len;
+    unsigned int cont_maxsize;
+    bool open;
+} n_content;
 
-    unsigned short curx;
-    unsigned short cury;
 
-    unsigned short maxy;
-    unsigned short maxx;
+
+typedef struct s_note {
+
+    n_content **content;
+    unsigned int note_len;
+    unsigned int note_maxsize;
+
+    int maxy;
+    int maxx;
+
+    int cury;
+    int curx;
 
 } NOTE;
 
-char *readLineForNote();
+// initialize note, if file on disk apty just create empy note;
+NOTE *init_note();
 
-int check_note_len(NOTE *note);
+//add note 
+void add_note(NOTE *note, char *note_name);
 
-void create_note(NOTE *note, char *note_content);
+//add content in note_name note
+void add_notecontent(NOTE *note, char *note_name, char *content);
 
-void create_child_note(NOTE *note, char *note_name, char *note_content);
+//delete note with name note_name
+void delete_note(NOTE *note, char *note_name);
 
-void delete_note(NOTE *note, int pos);
+//delete content from note is pos position
+void delte_content(NOTE *note, char *note_name, unsigned int pos);
 
-void open_note(NOTE *note);
 
-void print_note(NOTE *note);
 
-void show_screen();
 
-void resetWindow(WINDOW *win, NOTE *note);
-
-void refreshCurs();
-
-#endif // _NOTE_
+#endif //_NOTE_
