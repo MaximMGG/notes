@@ -1,12 +1,15 @@
-#include <ncurses.h>
 #include "str.h"
 #include "filework.h"
+#include <ncurses.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 
 #ifndef _NOTE_
 #define _NOTE_
 
-#define HOME "/home/";
-#define NOTE_NOT "/.local/share/note/note.not";
+#define HOME "/home/"
+#define NOTE_NOT "/.local/share/note/note.not"
 
 #define GET_PATH(b) str_concat(str_concat(HOME, b, 0), NOTE_NOT, 0) 
 
@@ -37,6 +40,9 @@ typedef struct s_note {
 
 // initialize note, if file on disk apty just create empy note;
 NOTE *init_note();
+
+//fill NOTE from note.not file
+void set_note_from_disk(NOTE *note, char **content);
 
 //add note 
 void add_note(NOTE *note, char *note_name);
