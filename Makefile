@@ -3,9 +3,10 @@ CC = gcc
 LIB = -lncurses
 
 SRC_DR = src/
+SRCL_DR = lib/
 OBJ_DR = obj/
 
-SRC = $(wildcard $(SRC_DR)*.c)
+SRC = $(wildcard $(SRC_DR)*.c $(SRCL_DR)*.c)
 OBJ = $(patsubst $(SRC_DR)%.c, $(OBJ_DR)%.o, $(SRC))
 
 

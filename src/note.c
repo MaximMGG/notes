@@ -161,3 +161,40 @@ int get_note_on_curs(NOTE *note) {
     }
     return -1;
 }
+
+
+//create window for user input and return char * with user enter string
+//TODO(maxim) if size of enter > 200 realloc
+char *user_input_window() {
+    int ch;
+    int y, x;
+    getmaxyx(stdscr, y, x);
+    WINDOW *tmp = newwin(5, 80, y - 15, x / 2 - 40);
+    box(tmp, 0, 0);
+    echo();
+    keypad(tmp, TRUE);
+
+    int i = 0;
+    char *enter = malloc(sizeof(char) * 200);
+    wmove(tmp, 1, 1);
+    wrefresh(tmp);
+    y = 1;
+    x = 1;
+
+    while ((ch = getch()) != '\n') {
+        switch (ch) {
+            case KEY_BACKSPACE: {
+                mvwaddch(tmp, y, x, ' ');       
+                mvwaddch(tmp, --y, x, ' ');       
+                wmove(tmp, --y, x);
+                continue;
+                break;
+            }
+        }
+        enter[i] = ch;
+    }
+
+    delwin(tmp);
+
+    return enter;
+}

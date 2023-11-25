@@ -4,8 +4,6 @@
 
 
 
-
-
 int main() {
 
     int ch;
@@ -37,24 +35,27 @@ int main() {
             case KEY_DOWN: {
                     move_curs(note, DOWN); 
                     show_win(stdscr);
+                    break;
                  }
             case 'k':
             case KEY_UP: {
                     move_curs(note, UP); 
                     show_win(stdscr);
+                    break;
                  }
             case '\n': {
                     set_note_open(note);
                     get_open_content(note);
                     reset_win(note);
+                    break;
                  }
             case 'c': {
-                    add_note(note, "");
+                    add_note(note, user_input_window());
+                    get_open_content(note);
+                    reset_win(note);
+                    break;
                  }
         }
-
-
-
 
     }
 
