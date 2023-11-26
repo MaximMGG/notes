@@ -25,7 +25,7 @@ int main() {
     show_win(stdscr);
 
     if (note->note_len == 0) {
-        mvaddstr(note->maxy - 1, note->maxx / 2 - 4, "Enter c for creating note");
+        mvaddstr(note->maxy - 2, note->maxx / 2 - 8, "Enter c for creating note");
         refresh();
     }
 

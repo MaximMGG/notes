@@ -6,7 +6,7 @@ unsigned int str_len(char *str) {
     unsigned int len = 0;
 
     for(int i = 0; ;i++) {
-        if (str[i] == '\0' && str[i] == '\n') {
+        if (str[i] == '\0' || str[i] == '\n') {
             len = ++i;
             return len;
         }
@@ -42,36 +42,28 @@ char *str_concat(char *first, char *second, char symbol) {
 
 void mem_cpy(char *target, char *from, unsigned int size) {
     
-    if (target == NULL) {
-        target = malloc(sizeof(char) * size);
-    } else {
-        target = realloc(target, sizeof(char) * size); 
+    if (str_len(target) != size) {
+        target = realloc(target, sizeof(char) * size);
     }
 
     int dword = size / 4;
     int les = size % 4;
 
-    unsigned char *b_t;
-    unsigned char *b_f;
+    unsigned int *i_t = (unsigned int *)target;
+    unsigned int *i_f = (unsigned int *)from;
 
-    if (dword > 0) {
-        unsigned int *p_t = (unsigned int *)target;
-        unsigned int *p_f = (unsigned int *)from;
-
-        for(int i = 0; i < dword; i++) {
-            *(p_t)++ = *(p_f)++;
-        }
- 
-        b_t = (unsigned char *) p_t;
-        b_f = (unsigned char *) p_f;
-    } else {
-        b_t = (unsigned char *) target;
-        b_t = (unsigned char *) from;
+    for(int i = 0; i < dword; i++) {
+        *(i_t++) = *(i_f++);
     }
 
-    for(int i = 0; i < les; i++) {
-        *(b_t)++ = *(b_f)++;
+    unsigned char *c_t = (unsigned char *)i_t;
+    unsigned char *c_f = (unsigned char *)i_f;
+    
+    for(int i = 0; i < dword; i++) {
+        *(c_t++) = *(c_f++);
     }
+
+
 }
 
 

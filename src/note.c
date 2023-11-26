@@ -58,13 +58,16 @@ void set_note_from_disk(NOTE *note, char **content, unsigned int *size) {
 
 //add note 
 void add_note(NOTE *note, char *note_name) {
+    int size = str_len(note_name);
+
     note->content[note->note_len] = malloc(sizeof(n_content *));
     note->content[note->note_len]->cont_maxsize = 20;
     note->content[note->note_len]->cont_len = 0;
     note->content[note->note_len]->cont = malloc(sizeof(char *) * 20);
+ 
+    note->content[note->note_len]->note_name = malloc(sizeof(char) * size);
 
-    mem_cpy(note->content[note->note_len++]->note_name, note_name, 
-                                                    str_len(note_name));
+    mem_cpy(note->content[note->note_len++]->note_name, note_name, size);
     
     if (note->note_len >= note->note_maxsize) {
         note->note_maxsize <<= 1;
@@ -172,6 +175,7 @@ char *user_input_window() {
     WINDOW *tmp = newwin(5, 80, y - 15, x / 2 - 40);
     box(tmp, 0, 0);
     echo();
+    curs_set(1);
     keypad(tmp, TRUE);
 
     int i = 0;
@@ -181,18 +185,23 @@ char *user_input_window() {
     y = 1;
     x = 1;
 
-    while ((ch = getch()) != '\n') {
+    while ((ch = wgetch(tmp)) != '\n') {
         switch (ch) {
             case KEY_BACKSPACE: {
-                mvwaddch(tmp, y, x, ' ');       
-                mvwaddch(tmp, --y, x, ' ');       
-                wmove(tmp, --y, x);
+                mvwaddch(tmp, y, --x, ' ');       
+                // mvwaddch(tmp, y, --x, ' ');       
+                wmove(tmp, y, x);
                 continue;
                 break;
             }
         }
-        enter[i] = ch;
+        enter[i++] = ch;
+        x++;
     }
+
+    enter[i] = '\0';
+    noecho();
+    curs_set(0);
 
     delwin(tmp);
 
