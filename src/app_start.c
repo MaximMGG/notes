@@ -55,10 +55,20 @@ int main() {
                     reset_win(note);
                     break;
                  }
+            case 'a': {
+                    int pos = get_note_on_curs(note);
+                    add_notecontent(note, 
+                            note->content[pos]->note_name, user_input_window());
+                    get_open_content(note);
+                    reset_win(note);
+                    break;
+                 }
         }
 
     }
 
+    char **content = prepare_content_for_disk(note);
+    save_note_in_file(note->path, content, note->total_len);
 
     endwin();
     return 0;

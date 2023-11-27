@@ -35,7 +35,16 @@ NOTE *init_note() {
          WSL_LOGIN(pwd, name);
     }
 
+    char *path = malloc(sizeof(char) * 10);
+
+    new->path = path;
+
     char **content = get_note_from_file(GET_PATH(name), &size);
+
+    mem_cpy(path, name, str_len(name));
+
+    free(name);
+    free(pwd);
 
     if (content == NULL) {
         return new;
@@ -94,8 +103,10 @@ void add_note(NOTE *note, char *note_name) {
 void add_notecontent(NOTE *note, char *note_name, char *content) {
     for(int i = 0; i < note->note_len;  i++) {
         if (str_cmp(note->content[i]->note_name, note_name)) {
-            mem_cpy(note->content[i]->cont[note->content[i]->cont_len++], 
-                    content, str_len(content));
+            int len = str_len(content);
+            note->content[i]->cont[note->content[i]->cont_len] = malloc(sizeof(char) * len);
+
+            mem_cpy(note->content[i]->cont[note->content[i]->cont_len++], content, len);
 
             if (note->content[i]->cont_len >= note->content[i]->cont_maxsize) {
                 note->content[i]->cont_maxsize <<= 1;

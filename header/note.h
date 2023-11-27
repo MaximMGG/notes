@@ -53,6 +53,8 @@ typedef struct s_note {
     unsigned int total_len;
     unsigned int open_content;
 
+    char *path;
+
 } NOTE;
 
 // initialize note, if file on disk apty just create empy note;

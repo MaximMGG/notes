@@ -23,13 +23,21 @@ char **get_screen_content(NOTE *note, int *size) {
         int len = str_len(note->content[i]->note_name);
         content[p] = malloc(sizeof(char) * len);
         mem_cpy(content[p++], note->content[i]->note_name, len);
+
         if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
             for(int j = 0; j < note->content[i]->cont_len; j++) {
                 len = str_len(note->content[i]->cont[j]);
                 content[p] = malloc(sizeof(char) * len);
                 mem_cpy(content[p++], 
-                       str_concat("    ", note->content[i]->cont[j], 0) , len);
+                       str_concat("    ", note->content[i]->cont[j], 0) , len + 4);
             }
+        }
+
+        if(note->content[i]->cont_len == 0 && note->content[i]->open == TRUE) {
+                len = str_len("Empty note");
+                content[p] = malloc(sizeof(char) * len);
+                mem_cpy(content[p++], 
+                       str_concat("    ", "Empty note", 0) , len + 4);
         }
     }
     *size = p;
