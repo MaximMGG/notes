@@ -10,7 +10,7 @@ int main() {
 
     initscr();
     raw();
-    echo();
+    noecho();
     keypad(stdscr, TRUE);
     curs_set(0);
     box(stdscr, 0, 0);

@@ -1,4 +1,5 @@
 #include "../header/note.h"
+#include <unistd.h>
 
 
 
@@ -25,7 +26,16 @@ NOTE *init_note() {
 
     unsigned int size = 0;
 
-    char **content = get_note_from_file(GET_PATH(getlogin()), &size);
+    char *name = malloc(sizeof(char) * 30);
+    char *pwd = malloc(sizeof(char) * 100);
+
+    getcwd(pwd, 100);
+
+    if (!getlogin_r(name, 30)) {
+         WSL_LOGIN(pwd, name);
+    }
+
+    char **content = get_note_from_file(GET_PATH(name), &size);
 
     if (content == NULL) {
         return new;

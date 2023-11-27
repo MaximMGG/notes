@@ -13,13 +13,24 @@
 
 #define GET_PATH(b) str_concat(str_concat(HOME, b, 0), NOTE_NOT, 0) 
 
+#define WSL_LOGIN(a, b) do { \
+                for (int i = 6, j = 0; ; j++, i++) { \
+                    if (a[i] = '/') { \
+                        b[j] = '\0'; \
+                        break;\
+                    }\
+                    b[j] = a[i];\
+                }\
+            }while(0);\
 
-typedef struct s_content {
-    char *note_name;
-    char **cont;
-    unsigned int cont_len;
-    unsigned int cont_maxsize;
-    bool open;
+
+
+    typedef struct s_content {
+        char *note_name;
+        char **cont;
+        unsigned int cont_len;
+        unsigned int cont_maxsize;
+        bool open;
 } n_content;
 
 

@@ -53,6 +53,8 @@ void print_content(NOTE *note) {
 
 //move curs up or down
 void move_curs(NOTE *note, char direction) {
+    if (note->note_len == 0) return;
+
     if (direction == UP) {
         if (note->cury == 1) return;
 

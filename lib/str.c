@@ -59,7 +59,7 @@ void mem_cpy(char *target, char *from, unsigned int size) {
     unsigned char *c_t = (unsigned char *)i_t;
     unsigned char *c_f = (unsigned char *)i_f;
     
-    for(int i = 0; i < dword; i++) {
+    for(int i = 0; i < les; i++) {
         *(c_t++) = *(c_f++);
     }
 
