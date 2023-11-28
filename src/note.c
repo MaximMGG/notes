@@ -3,6 +3,19 @@
 
 
 
+//[private]
+char *get_login_from_pwd(char *pwd, char *login) {
+    int i = 6, j = 0;
+    for(;;i++, j++) {
+        if (pwd[i] == '/') {
+            login[j] = '\0';
+            return login;
+        }
+        login[j] = pwd[i];
+    }
+}
+
+
 // initialize note, if file on disk apty just create empy note;
 NOTE *init_note() {
 
@@ -30,21 +43,23 @@ NOTE *init_note() {
     char *pwd = malloc(sizeof(char) * 100);
 
     getcwd(pwd, 100);
+    name = getlogin();
 
-    if (!getlogin_r(name, 30)) {
-         WSL_LOGIN(pwd, name);
+    if (name == NULL || str_len(name) < 1) {
+        name = get_login_from_pwd(pwd, name);
     }
 
-    char *path = malloc(sizeof(char) * 10);
+    char *total_path = GET_PATH(name);
 
+    char **content = get_note_from_file(total_path, &size);
+
+    char *path = malloc(sizeof(char) * str_len(total_path));
+    mem_cpy(path, total_path, str_len(total_path));
     new->path = path;
 
-    char **content = get_note_from_file(GET_PATH(name), &size);
-
-    mem_cpy(path, name, str_len(name));
-
-    free(name);
-    free(pwd);
+    // free(name);
+    // free(pwd);
+    // free(total_path);
 
     if (content == NULL) {
         return new;
@@ -131,9 +146,13 @@ char **prepare_content_for_disk(NOTE *note) {
     int j = 0;
 
     for(int i = 0; i < note->note_len; i++) {
-        mem_cpy(content[j++], str_concat("-", note->content[i]->note_name, 0), str_len(note->content[i]->note_name));
+        int len = str_len(note->content[i]->note_name);
+        content[j] = malloc(sizeof(char) * len + 1);
+        mem_cpy(content[j++], str_concat("-", note->content[i]->note_name, 0), len);
         if (note->content[i]->cont_len > 0) {
             for(int k = 0; k < note->content[i]->cont_len; k++) {
+                len = str_len(note->content[i]->cont[k]);
+                content[j] = malloc(sizeof(char) * len + 2);
                 mem_cpy(content[j++], str_concat("--", note->content[i]->cont[k], 0), str_len(note->content[i]->cont[k]));
             }
         }

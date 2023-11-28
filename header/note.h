@@ -10,18 +10,9 @@
 
 #define HOME "/home/"
 #define NOTE_NOT "/.local/share/note/note.not"
+#define NOTE_DIR "/.local/share/note"
 
 #define GET_PATH(b) str_concat(str_concat(HOME, b, 0), NOTE_NOT, 0) 
-
-#define WSL_LOGIN(a, b) do { \
-                for (int i = 6, j = 0; ; j++, i++) { \
-                    if (a[i] = '/') { \
-                        b[j] = '\0'; \
-                        break;\
-                    }\
-                    b[j] = a[i];\
-                }\
-            }while(0);\
 
 
 

@@ -14,13 +14,28 @@ char **reset_content(char **content, int size, int wsize, int from) {
     return content;
 }
 
+char *get_path_to_dir(char *path) {
+    int len = str_len(path) - 9;
+    char *path_dir = malloc(sizeof(char) * len);
+    int i = 0;
+    for(; i < len - 1; i++) {
+        path_dir[i] = path[i];
+    }
+    path_dir[i] = '\0';
+    return path_dir;
+}
+
 
 //read note.not and return all content from file, if file not exist create it
 //and return NULL, athou return size of note contents
 char **get_note_from_file(char *path, unsigned int *size) {
+
     FILE *f = fopen(path, "r");
     if (f == NULL) {
         f = fopen(path, "w");
+        system(str_concat("mkdir ", get_path_to_dir(path), 0)); 
+
+        fclose(f);
         return NULL;
     }
     int count = 100;
