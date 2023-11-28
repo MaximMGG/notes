@@ -45,6 +45,7 @@ NOTE *init_note() {
     getcwd(pwd, 100);
     name = getlogin();
 
+    //it should work for ubuntu wsl
     if (name == NULL || str_len(name) < 1) {
         name = get_login_from_pwd(pwd, name);
     }
