@@ -2,6 +2,7 @@
 
 
 
+
 char **get_content(NOTE *note) {
     char **cont = malloc(sizeof(char *) * note->open_content);
     int count = 0;
@@ -22,8 +23,8 @@ char **get_content(NOTE *note) {
 void print_content(NOTE *note) {
     char **cont = get_content(note);
 
-    for(int i = note->from; i <= note->maxy - 1 && note->open_content; i++) {
-        mvaddstr(i + 2, 2, cont[i]);
+    for(int i = note->from; i <= note->maxy - 1 && i < note->open_content; i++) {
+        mvaddstr(i + 1, 2, cont[i]);
     }
 
     free(cont);
@@ -43,3 +44,52 @@ void reset_win(NOTE *note) {
     box(stdscr, 0, 0);
     refresh();
 }
+
+
+void move_curs(NOTE *note, char direction) {
+    if(note->open_content < 2) {
+        return;
+    }
+    if (direction == UP) {
+        if (note->cury == 1) {
+            return;
+        }
+        if (note->from > 0 && note->cury < 8) {
+            note->from--;
+            return;
+        }
+        if (note->from > 0 && note->cury > 7) {
+            mvaddch(note->cury--, note->curx, ' ');
+            mvaddch(note->cury, note->curx, '>');
+            return;
+        }
+        if (note->from == 0) {
+            mvaddch(note->cury--, note->curx, ' ');
+            mvaddch(note->cury, note->curx, '>');
+            return;
+        }
+    } else {
+        if (note->cury == note->open_content - note->from) {
+            return;
+        }
+        if (note->cury == note->maxy - 1) {
+            return;
+        }
+        if ((note->open_content - note->from) > note->maxy) {
+            if (note->cury > note->maxy - 9) {
+                note->from++;
+                return;
+            }
+            if (note->cury < note->maxy - 9) {
+                mvaddch(note->cury++, note->curx, ' ');
+                mvaddch(note->cury, note->curx, '>');
+                return;
+            }
+        } else {
+            mvaddch(note->cury++, note->curx, ' ');
+            mvaddch(note->cury, note->curx, '>');
+            return;
+        }
+    }
+}
+

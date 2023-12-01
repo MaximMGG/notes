@@ -69,7 +69,7 @@ char **prepare_content_for_disk(NOTE *note);
 int get_open_content(NOTE *note);
 
 //if note open == true -> set false and opozite
-void set_note_open(NOTE *note);
+void set_note_open(NOTE *note, int pos);
 
 //return index of note on cury position
 int get_note_on_curs(NOTE *note);
@@ -77,5 +77,7 @@ int get_note_on_curs(NOTE *note);
 //create window for user input and return char * with user enter string
 char *get_user_input_window();
 
+//free all windows and resources;
+void end_work();
 
 #endif //_NOTE_

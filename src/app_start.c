@@ -31,11 +31,15 @@ int main() {
         switch (ch) {
             case 'j':
             case KEY_DOWN: {
-
+                    move_curs(note, DOWN);
+                    show_win(stdscr);
+                    break;
                 } 
             case 'k':
             case KEY_UP: {
-
+                    move_curs(note, UP);
+                    show_win(stdscr);
+                    break;
                 } 
             case 'c': {
                     char *input = get_user_input_window();
@@ -50,10 +54,13 @@ int main() {
                     reset_win(note);
                     break;
                 }
+            case '\n': {
+                    int index = get_note_on_curs(note);
+                }
         }
     }
 
 
-    endwin();
+    end_work();
     return 0;
 }

@@ -3,6 +3,9 @@
 #include <curses.h>
 
 
+
+WINDOW *tmp;
+
 char *get_login_from_pwd(char *pwd) {
     char *buf = SMAL(30);
 
@@ -24,6 +27,7 @@ NOTE *init_note() {
     note->content = malloc(sizeof(n_content *) * note->note_maxsize);
 
     getmaxyx(stdscr, note->maxy, note->maxx);
+    tmp = newwin(5, 80, note->maxy - 14, note->maxx / 2 - 40);
 
     note->cury = 1;
     note->curx = 1;
@@ -93,6 +97,7 @@ void add_note(NOTE *note, char *note_name) {
     note->content[note->note_len]->cont_len = 0;
     note->content[note->note_len]->open = FALSE;
     note->note_len++;
+    note->open_content++;
 
     if (note->note_len >= note->note_maxsize) {
         note->note_maxsize <<= 1;
@@ -119,8 +124,6 @@ void add_notecontent(NOTE *note, char *note_name, char *content) {
 char *get_user_input_window() {
     int y, x;
     getmaxyx(stdscr, y, x);
-    
-    WINDOW *tmp = newwin(5, 80, y - 14, x / 2 - 20);
 
     echo();
     keypad(tmp, TRUE);
@@ -159,7 +162,9 @@ char *get_user_input_window() {
    
     noecho();
     curs_set(0);
-    delwin(tmp);
+
+    wclear(tmp);
+    wrefresh(tmp);
 
     return buffer;
 }
@@ -180,4 +185,17 @@ int get_note_on_curs(NOTE *note) {
         }
     }
     return count;
+}
+
+void set_note_open(NOTE *note, int pos) {
+    if (note->content[pos]->open == TRUE) {
+         note->content[pos]->open = FALSE;
+    } else {
+         note->content[pos]->open = TRUE;
+    }
+}
+
+void end_work(){
+    delwin(tmp);
+    endwin();
 }
