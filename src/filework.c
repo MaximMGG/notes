@@ -23,7 +23,8 @@ char **get_note_from_file(char *path, unsigned int *size) {
         return NULL;
     }
     int len = 100;
-    char **content = reset_size(content, len);
+    char **content = NULL;
+    content = reset_size(content, len);
     
     int i = 0;
     while(!feof(f)) {
@@ -40,6 +41,7 @@ char **get_note_from_file(char *path, unsigned int *size) {
         }
     }
 
+    *size = i - 1;
     content = reset_size(content, i);
 
     return content;

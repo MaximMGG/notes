@@ -75,7 +75,7 @@ void set_note_open(NOTE *note);
 int get_note_on_curs(NOTE *note);
 
 //create window for user input and return char * with user enter string
-char *user_input_window();
+char *get_user_input_window();
 
 
 #endif //_NOTE_

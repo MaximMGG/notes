@@ -1,5 +1,6 @@
 #include "../header/note.h"
 #include "../header/util.h"
+#include <curses.h>
 
 
 char *get_login_from_pwd(char *pwd) {
@@ -39,7 +40,8 @@ NOTE *init_note() {
     }
 
     char *path = SMAL(100);
-    path = strcat(HOME, login);
+    path = strcat(path, HOME);
+    path = strcat(path, login);
     path = strcat(path, NOTE_NOT);
     unsigned int size = 0;
     char **content = get_note_from_file(path, &size);
@@ -96,6 +98,7 @@ void add_note(NOTE *note, char *note_name) {
         note->note_maxsize <<= 1;
         note->content = realloc(note->content, sizeof(n_content * ) * note->note_maxsize);
     }
+    free(note_name);
 }
 
 void add_notecontent(NOTE *note, char *note_name, char *content) {
@@ -110,4 +113,71 @@ void add_notecontent(NOTE *note, char *note_name, char *content) {
             }
         }
     }
+    free(content);
+}
+
+char *get_user_input_window() {
+    int y, x;
+    getmaxyx(stdscr, y, x);
+    
+    WINDOW *tmp = newwin(5, 80, y - 14, x / 2 - 20);
+
+    echo();
+    keypad(tmp, TRUE);
+    curs_set(1);
+    wmove(tmp, 1, 2);
+
+    box(tmp, 0, 0);
+    wrefresh(tmp);
+    
+    int ch;
+    char *buffer = malloc(sizeof(char) * 200);
+    int i = 0;
+    x = 1;
+
+    while((ch = wgetch(tmp)) != '\n') {
+        switch (ch) {
+            case KEY_BACKSPACE: {
+                    if (x == 2) {
+                        wmove(tmp, 1, 2);
+                        continue;
+                    }
+                    mvwaddch(tmp, 1, x--, ' ');           
+                    mvwaddch(tmp, 1, x, ' ');           
+                    wmove(tmp, 1, x);
+                    if (i >= 1)
+                        buffer[--i] = ' ';
+                    continue;
+                    break;
+                }
+        }
+        buffer[i++] = ch;
+        x++;
+    }
+    buffer[i] = '\0';
+    buffer = realloc(buffer, sizeof(char) * i);
+   
+    noecho();
+    curs_set(0);
+    delwin(tmp);
+
+    return buffer;
+}
+
+int get_note_on_curs(NOTE *note) {
+    int count = 0;
+    for(int i = 0; i < note->open_content + 1; i++) {
+
+        count++;
+        if (count == note->cury) return --count; 
+
+        if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
+            for(int j = 0; j < note->content[i]->cont_len; j++) {
+
+                count++;
+                if (count == note->cury) return --count; 
+            }
+        }
+    }
+    return count;
 }
