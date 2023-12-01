@@ -38,10 +38,10 @@ NOTE *init_note() {
         login = get_login_from_pwd(getcwd(cwd, 200));
     }
 
-    char *path = strcat(HOME, login);
+    char *path = SMAL(100);
+    path = strcat(HOME, login);
     path = strcat(path, NOTE_NOT);
     unsigned int size = 0;
-    //TODO (Maxim) write whis method
     char **content = get_note_from_file(path, &size);
     
     if (content == NULL) {
@@ -80,3 +80,34 @@ void set_note_from_disk(NOTE *note, char **content, unsigned int *size) {
     }
 }
 
+
+void add_note(NOTE *note, char *note_name) {
+    note->content[note->note_len] = malloc(sizeof(n_content *));
+    note->content[note->note_len]->note_name = malloc(sizeof(char) * strlen(note_name));
+    strcpy(note->content[note->note_len]->note_name, note_name);
+
+    note->content[note->note_len]->cont_maxsize = 20;
+    note->content[note->note_len]->cont = malloc(sizeof(char *) * 20);
+    note->content[note->note_len]->cont_len = 0;
+    note->content[note->note_len]->open = FALSE;
+    note->note_len++;
+
+    if (note->note_len >= note->note_maxsize) {
+        note->note_maxsize <<= 1;
+        note->content = realloc(note->content, sizeof(n_content * ) * note->note_maxsize);
+    }
+}
+
+void add_notecontent(NOTE *note, char *note_name, char *content) {
+    for(int i = 0; i < note->note_len; i++) {
+        if (!strcmp(note->content[i]->note_name, note_name)) {
+            note->content[i]->cont[note->content[i]->cont_len] = malloc(sizeof(char) * strlen(content));
+            strcpy(note->content[i]->cont[note->content[i]->cont_len++], content);
+
+            if(note->content[i]->cont_len >= note->content[i]->cont_maxsize) {
+                note->content[i]->cont_maxsize <<= 1;
+                note->content[i]->cont = realloc(note->content[i]->cont, sizeof(char *) * note->content[i]->cont_maxsize);
+            }
+        }
+    }
+}
