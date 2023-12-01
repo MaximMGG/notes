@@ -1,8 +1,8 @@
-#include "str.h"
 #include "filework.h"
 #include <ncurses.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 
 #ifndef _NOTE_
@@ -11,12 +11,9 @@
 #define HOME "/home/"
 #define NOTE_NOT "/.local/share/note/note.not"
 #define NOTE_DIR "/.local/share/note"
+#define SMAL(a) malloc(sizeof(char) * a)
 
-#define GET_PATH(b) str_concat(str_concat(HOME, b, 0), NOTE_NOT, 0) 
-
-
-
-    typedef struct s_content {
+typedef struct s_content {
         char *note_name;
         char **cont;
         unsigned int cont_len;
@@ -39,7 +36,6 @@ typedef struct s_note {
     int curx;
 
     int from;
-    int to;
 
     unsigned int total_len;
     unsigned int open_content;
