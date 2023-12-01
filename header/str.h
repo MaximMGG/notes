@@ -18,5 +18,7 @@ void mem_cpy(char *target, char *from, unsigned int size);
 //compering to strings if same return 1 or 0
 char str_cmp(const char *first, const char *second);
 
+//return substring bitween to pointers
+char *str_sub(char *target, int from, int to);
 
 #endif

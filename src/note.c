@@ -39,7 +39,7 @@ NOTE *init_note() {
 
     unsigned int size = 0;
 
-    char *name = malloc(sizeof(char) * 30);
+    char *name;
     char *pwd = malloc(sizeof(char) * 100);
 
     getcwd(pwd, 100);
@@ -47,6 +47,7 @@ NOTE *init_note() {
 
     //it should work for ubuntu wsl
     if (name == NULL || str_len(name) < 1) {
+        name = malloc(sizeof(char) * 30);
         name = get_login_from_pwd(pwd, name);
     }
 
@@ -58,15 +59,12 @@ NOTE *init_note() {
     mem_cpy(path, total_path, str_len(total_path));
     new->path = path;
 
-    // free(name);
-    // free(pwd);
-    // free(total_path);
 
     if (content == NULL) {
         return new;
     }
     set_note_from_disk(new, content, &size);
-
+    free(content);
     new->to = new->total_len;
 
     return new;
@@ -74,20 +72,24 @@ NOTE *init_note() {
 
 void set_note_from_disk(NOTE *note, char **content, unsigned int *size) {
     for (int i = 0; i < *size; i++) {
-         if(content[i][0] == '-' && content[i][1] != '-') {
+        if(content[i][0] == '-' && content[i][1] != '-') {
+            char *buf = str_sub(content[i], 1, str_len(content[i]) - 1);
             add_note(note, content[i]);
-         }
-         if(content[i][0] == '-' && content[i][1] == '-') {
-             char *note_name = content[i - 1];
-             for(; ; i++) {
+            free(buf);
+        }
+        if(content[i][0] == '-' && content[i][1] == '-') {
+            char *note_name = content[i - 1];
+            for(;i < *size ; i++) {
                 if (content[i][0] == '-' && content[i][1] != '-') {
                     i--;
                     break;
                 }
+                char *buf = str_sub(content[i], 2, str_len(content[i]) - 1);
                 add_notecontent(note, note_name, content[i]);
-             }
+                free(buf);
+            }
 
-         }
+        }
     }
 }
 

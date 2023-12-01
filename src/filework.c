@@ -54,6 +54,7 @@ char **get_note_from_file(char *path, unsigned int *size) {
         free(buf);
     }
     fclose(f);
+    *size = i - 1;
     return content;
 }
 
@@ -62,7 +63,8 @@ int save_note_in_file(char *path, char **content, int size) {
     FILE *f = fopen(path, "w");
 
     for(int i = 0; i < size; i++) {
-        fputs(content[i], f);
+        // fputs(content[i], f);
+        fprintf(f, "%s\n", content[i]);
     }
 
     fclose(f);

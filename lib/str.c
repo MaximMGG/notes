@@ -63,6 +63,7 @@ void mem_cpy(char *target, char *from, unsigned int size) {
         *(c_t++) = *(c_f++);
     }
 
+    *c_t = '\0';
 
 }
 
@@ -82,3 +83,15 @@ char str_cmp(const char *first, const char *second) {
     return 1;
 }
 
+
+char *str_sub(char *target, int from, int to) {
+    
+    char *buf = malloc(sizeof(char) * to - from + 1);
+    int j = 0;
+    for (int i = from; i < to; i++, j++) {
+        buf[j] = target[i];
+    }
+    buf[++j] = '\0';
+
+    return buf;
+}

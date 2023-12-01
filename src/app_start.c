@@ -7,6 +7,7 @@
 int main() {
 
     int ch;
+    getch();
 
     initscr();
     raw();
