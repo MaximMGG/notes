@@ -41,6 +41,7 @@ NOTE *init_note() {
     if (login == NULL) {
         char *cwd = SMAL(200);
         login = get_login_from_pwd(getcwd(cwd, 200));
+        free(cwd);
     }
 
     char *path = SMAL(100);
@@ -49,6 +50,9 @@ NOTE *init_note() {
     path = strcat(path, NOTE_NOT);
     unsigned int size = 0;
     char **content = get_note_from_file(path, &size);
+
+    note->path = SMAL(strlen(path));
+    strcpy(note->path, path);
     
     if (content == NULL) {
         return note;
@@ -57,16 +61,18 @@ NOTE *init_note() {
     set_note_from_disk(note, content, &size);
     note->total_len = size;
 
+    free(path);
     return note;
 }
 
 
 void set_note_from_disk(NOTE *note, char **content, unsigned int *size) {
+    char *buf;
     for(int i = 0; i < *size; i++) {
-        char *buf;
         if (content[i][0] == '-' && content[i][1] != '-') {
             buf = str_sub(content[i], 1, strlen(content[i]) - 1);
-            add_note(note, buf); //TODO (Maxim) write method
+            add_note(note, buf); 
+            i++;
         }
         if (content[i][0] == '-' && content[i][1] == '-') {
             char *parent_name = buf;
@@ -76,14 +82,11 @@ void set_note_from_disk(NOTE *note, char **content, unsigned int *size) {
                     break;
                 }
                 buf = str_sub(content[i], 2, strlen(content[i]) - 1);
-                //TODO (Maxim) write this method
                 add_notecontent(note, parent_name, buf);
             }
         }
-        if (buf != NULL) {
-            free(buf);
-        }
     }
+    free(buf);
 }
 
 
@@ -98,12 +101,12 @@ void add_note(NOTE *note, char *note_name) {
     note->content[note->note_len]->open = FALSE;
     note->note_len++;
     note->open_content++;
+    note->total_len++;
 
     if (note->note_len >= note->note_maxsize) {
         note->note_maxsize <<= 1;
         note->content = realloc(note->content, sizeof(n_content * ) * note->note_maxsize);
     }
-    free(note_name);
 }
 
 void add_notecontent(NOTE *note, char *note_name, char *content) {
@@ -112,13 +115,17 @@ void add_notecontent(NOTE *note, char *note_name, char *content) {
             note->content[i]->cont[note->content[i]->cont_len] = malloc(sizeof(char) * strlen(content));
             strcpy(note->content[i]->cont[note->content[i]->cont_len++], content);
 
+            if(note->content[i]->open == TRUE) {
+                note->open_content++;
+            }
+
             if(note->content[i]->cont_len >= note->content[i]->cont_maxsize) {
                 note->content[i]->cont_maxsize <<= 1;
                 note->content[i]->cont = realloc(note->content[i]->cont, sizeof(char *) * note->content[i]->cont_maxsize);
             }
         }
     }
-    free(content);
+    note->total_len++;
 }
 
 char *get_user_input_window() {
@@ -174,13 +181,13 @@ int get_note_on_curs(NOTE *note) {
     for(int i = 0; i < note->open_content + 1; i++) {
 
         count++;
-        if (count == note->cury) return --count; 
+        if (count == note->cury) return i; 
 
         if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
             for(int j = 0; j < note->content[i]->cont_len; j++) {
 
                 count++;
-                if (count == note->cury) return --count; 
+                if (count == note->cury) return i; 
             }
         }
     }
@@ -190,12 +197,39 @@ int get_note_on_curs(NOTE *note) {
 void set_note_open(NOTE *note, int pos) {
     if (note->content[pos]->open == TRUE) {
          note->content[pos]->open = FALSE;
+         note->open_content -= note->content[pos]->cont_len;
     } else {
          note->content[pos]->open = TRUE;
+         note->open_content += note->content[pos]->cont_len;
     }
 }
 
 void end_work(){
     delwin(tmp);
     endwin();
+}
+
+char **prepare_content_for_disk(NOTE *note) {
+    char **content = malloc(sizeof(char *) * note->total_len);
+    int p = 0;
+    int size = 0;
+
+    for(int i = 0; i < note->note_len; i++) {
+        size = strlen(note->content[i]->note_name);
+        content[p] = SMAL(size + 1);
+        memset(content[p], 0, size + 1);
+        content[p][0] = '-';
+        strcat(content[p++], note->content[i]->note_name);
+        if (note->content[i]->cont_len > 0) {
+            for(int j = 0; j< note->content[i]->cont_len; j++) {
+                size = strlen(note->content[i]->cont[j]);
+                content[p] = SMAL(size + 2);
+                memset(content[p], 0, size + 2);
+                content[p][0] = '-';
+                content[p][1] = '-';
+                strcat(content[p++], note->content[i]->cont[j]);
+            }
+        }
+    }
+    return content;
 }

@@ -56,11 +56,14 @@ int main() {
                 }
             case '\n': {
                     int index = get_note_on_curs(note);
+                    set_note_open(note, index); 
+                    reset_win(note);
+                    break;
                 }
         }
     }
 
-
+    save_note_in_file(note->path, prepare_content_for_disk(note), note->total_len);
     end_work();
     return 0;
 }

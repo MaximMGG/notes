@@ -11,8 +11,9 @@ char **get_content(NOTE *note) {
         strcpy(cont[count++], note->content[i]->note_name);
         if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
             for(int j = 0; j < note->content[i]->cont_len; j++) {
-                cont[count] = malloc(sizeof(char) * strlen(note->content[i]->cont[j]));
-                strcpy(cont[count++], note->content[i]->cont[j]);
+                cont[count] = malloc(sizeof(char) * strlen(note->content[i]->cont[j]) + 4);
+                strcpy(cont[count], "    ");
+                strcat(cont[count++], note->content[i]->cont[j]);
             }
         }
     }
