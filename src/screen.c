@@ -24,8 +24,8 @@ char **get_content(NOTE *note) {
 void print_content(NOTE *note) {
     char **cont = get_content(note);
 
-    for(int i = note->from; i <= note->maxy - 1 && i < note->open_content; i++) {
-        mvaddstr(i + 1, 2, cont[i]);
+    for(int i = note->from, j = 1; j <= note->maxy - 2 && j < note->open_content + 1; i++, j++) {
+        mvaddstr(j, 2, cont[i]);
     }
 
     free(cont);
@@ -57,6 +57,7 @@ void move_curs(NOTE *note, char direction) {
         }
         if (note->from > 0 && note->cury < 8) {
             note->from--;
+            reset_win(note);
             return;
         }
         if (note->from > 0 && note->cury > 7) {
@@ -73,15 +74,21 @@ void move_curs(NOTE *note, char direction) {
         if (note->cury == note->open_content - note->from) {
             return;
         }
-        if (note->cury == note->maxy - 1) {
+        if (note->cury == note->maxy - 2) {
             return;
         }
-        if ((note->open_content - note->from) > note->maxy) {
+        if ((note->open_content - note->from) > note->maxy - 2) {
             if (note->cury > note->maxy - 9) {
                 note->from++;
+                reset_win(note);
                 return;
             }
             if (note->cury < note->maxy - 9) {
+                mvaddch(note->cury++, note->curx, ' ');
+                mvaddch(note->cury, note->curx, '>');
+                return;
+            }
+            else {
                 mvaddch(note->cury++, note->curx, ' ');
                 mvaddch(note->cury, note->curx, '>');
                 return;

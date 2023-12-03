@@ -135,7 +135,7 @@ char *get_user_input_window() {
     echo();
     keypad(tmp, TRUE);
     curs_set(1);
-    wmove(tmp, 1, 2);
+    wmove(tmp, 1, 1);
 
     box(tmp, 0, 0);
     wrefresh(tmp);
@@ -146,20 +146,14 @@ char *get_user_input_window() {
     x = 1;
 
     while((ch = wgetch(tmp)) != '\n') {
-        switch (ch) {
-            case KEY_BACKSPACE: {
-                    if (x == 2) {
-                        wmove(tmp, 1, 2);
-                        continue;
-                    }
-                    mvwaddch(tmp, 1, x--, ' ');           
-                    mvwaddch(tmp, 1, x, ' ');           
-                    wmove(tmp, 1, x);
-                    if (i >= 1)
-                        buffer[--i] = ' ';
-                    continue;
-                    break;
-                }
+        if(ch == KEY_BACKSPACE) {
+            if (x > 1) {
+                mvwaddch(tmp, 1, x, ' ');
+                mvwaddch(tmp, 1, --x, ' ');
+                wmove(tmp, 1, x);
+                buffer[--i] = 0;
+                continue;
+            }
         }
         buffer[i++] = ch;
         x++;
@@ -194,13 +188,32 @@ int get_note_on_curs(NOTE *note) {
     return count;
 }
 
+//private
+void set_curs_on_close_note(NOTE *note, int pos) {
+    int count = 1;
+    for(int i = 0; i < note->note_len; i++) {
+        if (pos == i) {
+            mvaddch(note->cury, note->curx, ' ');
+            note->cury = count;
+            mvaddch(note->cury, note->curx, '>');
+            return;
+        }
+        if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
+            count += note->content[i]->cont_len;
+        }
+        count++;
+    }
+}
+
+
 void set_note_open(NOTE *note, int pos) {
     if (note->content[pos]->open == TRUE) {
-         note->content[pos]->open = FALSE;
-         note->open_content -= note->content[pos]->cont_len;
+        set_curs_on_close_note(note, pos);
+        note->content[pos]->open = FALSE;
+        note->open_content -= note->content[pos]->cont_len;
     } else {
-         note->content[pos]->open = TRUE;
-         note->open_content += note->content[pos]->cont_len;
+        note->content[pos]->open = TRUE;
+        note->open_content += note->content[pos]->cont_len;
     }
 }
 
