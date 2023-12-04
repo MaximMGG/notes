@@ -57,10 +57,10 @@ void add_note(NOTE *note, char *note_name);
 void add_notecontent(NOTE *note, char *note_name, char *content);
 
 //delete note with name note_name
-void delete_note(NOTE *note, char *note_name);
+void delete_note(NOTE *note);
 
 //delete content from note is pos position
-void delte_content(NOTE *note, char *note_name, unsigned int pos);
+void delte_content(NOTE *note);
 
 //cast all notes and content to char ** for disk writing
 char **prepare_content_for_disk(NOTE *note);

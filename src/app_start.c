@@ -3,7 +3,6 @@
 
 
 
-
 int main() {
 
     int ch;
@@ -58,6 +57,14 @@ int main() {
                     int index = get_note_on_curs(note);
                     set_note_open(note, index); 
                     reset_win(note);
+                    break;
+                }
+            case 'd': {
+                    delete_note(note);                    
+                    reset_win(note);
+                    break;
+                }
+            case 'r': {
                     break;
                 }
         }

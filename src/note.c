@@ -209,6 +209,11 @@ void set_curs_on_close_note(NOTE *note, int pos) {
 void set_note_open(NOTE *note, int pos) {
     if (note->content[pos]->open == TRUE) {
         set_curs_on_close_note(note, pos);
+        if ((int) (note->from - note->content[pos]->cont_len) < 0) {
+            note->from = 0;
+        } else {
+            note->from -= note->content[pos]->cont_len;
+        }
         note->content[pos]->open = FALSE;
         note->open_content -= note->content[pos]->cont_len;
     } else {
@@ -245,4 +250,29 @@ char **prepare_content_for_disk(NOTE *note) {
         }
     }
     return content;
+}
+
+void delete_note(NOTE *note) {
+    int cur_pos = get_note_on_curs(note);
+    if (note->content[cur_pos]->open == TRUE) {
+        note->open_content -= note->content[cur_pos]->cont_len;
+        note->total_len -= note->content[cur_pos]->cont_len;
+    }
+    if (cur_pos == note->note_len - 1) {
+        note->note_len--;
+        note->total_len--;
+        free(note->content[cur_pos]);
+        return;
+    }
+    note->total_len -= note->content[cur_pos]->cont_len + 1;
+    free(note->content[cur_pos]);
+
+    for(int i = cur_pos; i < note->note_len - 1; i++) {
+        note->content[i] = note->content[i + 1];
+    }
+    note->note_len--;
+}
+
+void delte_content(NOTE *note) {
+
 }
