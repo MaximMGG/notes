@@ -254,23 +254,37 @@ char **prepare_content_for_disk(NOTE *note) {
 
 void delete_note(NOTE *note) {
     int cur_pos = get_note_on_curs(note);
-    if (note->content[cur_pos]->open == TRUE) {
-        note->open_content -= note->content[cur_pos]->cont_len;
-        note->total_len -= note->content[cur_pos]->cont_len;
-    }
+
     if (cur_pos == note->note_len - 1) {
         note->note_len--;
-        note->total_len--;
+        note->total_len -= note->content[cur_pos]->cont_len + 1;
+        if (note->content[cur_pos]->open == TRUE) {
+            note->open_content -= note->content[cur_pos]->cont_len + 1;
+            if (note->from > 0 && (int) (note->from - note->content[cur_pos]->cont_len) < 0) {
+                note->from = 0;
+            }
+        } else {
+            note->open_content--;
+        }
         free(note->content[cur_pos]);
         return;
+    } else {
+        note->note_len--;
+        note->total_len -= note->content[cur_pos]->cont_len + 1;
+        if (note->content[cur_pos]->open == TRUE) {
+            note->open_content -= note->content[cur_pos]->cont_len + 1;
+            if (note->from > 0 && (int) (note->from - note->content[cur_pos]->cont_len) < 0) {
+                note->from = 0;
+            }
+        } else {
+            note->open_content--;
+        }
     }
-    note->total_len -= note->content[cur_pos]->cont_len + 1;
-    free(note->content[cur_pos]);
 
-    for(int i = cur_pos; i < note->note_len - 1; i++) {
-        note->content[i] = note->content[i + 1];
+    free(note->content[cur_pos]);
+    for(int i = cur_pos; i < note->note_len; i++) {
+       note->content[i] = note->content[i + 1]; 
     }
-    note->note_len--;
 }
 
 void delte_content(NOTE *note) {
