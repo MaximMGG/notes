@@ -1,14 +1,17 @@
-#include "../header/note.h"
-#include "../header/util.h"
 #include <curses.h>
 #include <ncurses.h>
+#include "../header/note.h"
 
 
 
 WINDOW *tmp;
+CONFIG *cnf;
 
 
 NOTE *init_note() {
+
+    cnf = init_config();
+
     NOTE *note = malloc(sizeof(*note));
     note->note_maxsize = 20;
     note->note_len = 0;

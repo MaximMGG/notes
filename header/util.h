@@ -1,3 +1,7 @@
+
+#ifndef _UTIL_
+#define _UTIL_
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -21,9 +25,6 @@ typedef struct {
     unsigned int max_len;
 } MAP;
 
-typedef struct {
-    char *login;
-} N_config;
 
 //start MAP func
 MAP *map_init(unsigned int size);
@@ -50,3 +51,6 @@ void map_destroy(MAP *map);
 char *str_sub(char *tar, int from, int to);
 
 C_map *pars_val_from_config(char *str);
+
+#endif// _UTIL_
+

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include "util.h"
 
 
 #ifndef _NOTE_
@@ -11,7 +12,11 @@
 #define HOME "/home/"
 #define NOTE_NOT "/.local/share/note/note.not"
 #define NOTE_DIR "/.local/share/note"
-#define SMAL(a) malloc(sizeof(char) * a)
+
+typedef struct {
+    char *login;
+} CONFIG;
+
 
 typedef struct s_content {
         char *note_name;
@@ -47,6 +52,8 @@ typedef struct s_note {
 // initialize note, if file on disk apty just create empy note;
 NOTE *init_note();
 
+void set_config(MAP *config);
+
 //fill NOTE from note.not file
 void set_note_from_disk(NOTE *note, char **content, unsigned int *size);
 
@@ -79,5 +86,8 @@ char *get_user_input_window();
 
 //free all windows and resources;
 void end_work();
+
+
+CONFIG *init_config();
 
 #endif //_NOTE_
