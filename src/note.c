@@ -50,8 +50,8 @@ NOTE *init_note() {
 
     login = getlogin();
 
-    free(login);
     if (login == NULL) {
+        free(login);
         login = login_from_tmp(login);
         login[strlen(login) - 1] = '\0';
         if (login == NULL) {
@@ -79,7 +79,7 @@ NOTE *init_note() {
     note->total_len = size;
 
     free(path);
-    free(login);
+    // free(login);
     return note;
 }
 
@@ -326,6 +326,8 @@ void delete_content_helper(NOTE *note, int note_pos, int cont_i) {
             }
         }
         free(note->content[note_pos]->cont[cont_i]);
+        mvaddch(note->cury, note->curx, ' ');
+        mvaddch(--note->cury, note->curx, '>');
         return;
     } else {
         note->content[note_pos]->cont_len--;
@@ -341,6 +343,8 @@ void delete_content_helper(NOTE *note, int note_pos, int cont_i) {
             note->content[note_pos]->cont[i] = note->content[note_pos]->cont[i + 1];
         }
     }
+    mvaddch(note->cury, note->curx, ' ');
+    mvaddch(--note->cury, note->curx, '>');
 }
 
 
@@ -348,11 +352,24 @@ void delete_content(NOTE *note) {
     char buf[128];
     memset(buf, 0, 128);
     char ch;
+    char ch2 = 0; 
+    char ch3 = 0;
     int i = 0, p = 5;
     ch = mvinch(note->cury, note->curx + p);
     while(p < note->maxx) {
         if (ch == 32 || ch == 0) {
-            break;
+            if (ch2 == 0) {
+                ch2 = 32;
+            } else {
+                ch3 = 32;
+            }
+            if (ch2 == 32 && ch3 == 32) {
+                buf[--i] = '\0';
+                break;
+            }
+        } else {
+            ch2 = 0;
+            ch3 = 0;
         }
         buf[i++] = ch;
         p++;
