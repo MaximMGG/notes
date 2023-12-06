@@ -65,6 +65,8 @@ int main() {
                     break;
                 }
             case 'r': {
+                    delete_content(note);
+                    reset_win(note);
                     break;
                 }
         }

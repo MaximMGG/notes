@@ -1,6 +1,7 @@
 #include "../header/note.h"
 #include "../header/util.h"
 #include <curses.h>
+#include <ncurses.h>
 
 
 
@@ -266,6 +267,10 @@ void delete_note(NOTE *note) {
         } else {
             note->open_content--;
         }
+        if (note->cury > 1) {
+            mvaddch(note->cury, note->curx, ' ');
+            mvaddch(--note->cury, note->curx, '>');
+        }
         free(note->content[cur_pos]);
         return;
     } else {
@@ -287,6 +292,57 @@ void delete_note(NOTE *note) {
     }
 }
 
-void delte_content(NOTE *note) {
+//private
+void delete_content_helper(NOTE *note, int note_pos, int cont_i) {
+    if (cont_i == note->content[note_pos]->cont_len - 1) {
+        note->content[note_pos]->cont_len--;
+        note->total_len--;
+        if (note->content[note_pos]->open == TRUE) {
+            note->open_content--;
+            if (note->open_content - note->from > note->maxy) {
+                note->from--;
+            }
+        }
+        free(note->content[note_pos]->cont[cont_i]);
+        return;
+    } else {
+        note->content[note_pos]->cont_len--;
+        note->total_len--;
+        if (note->content[note_pos]->open == TRUE) {
+            note->open_content--;
+            if (note->open_content - note->from > note->maxy) {
+                note->from--;
+            }
+        }
+        free(note->content[note_pos]->cont[cont_i]);
+        for(int i = cont_i; i < note->content[note_pos]->cont_len; i++) {
+            note->content[note_pos]->cont[i] = note->content[note_pos]->cont[i + 1];
+        }
+    }
+}
 
+
+void delete_content(NOTE *note) {
+    char buf[128];
+    memset(buf, 0, 128);
+    char ch;
+    int i = 0, p = 5;
+    ch = mvinch(note->cury, note->curx + p);
+    while(p < note->maxx) {
+        if (ch == 32 || ch == 0) {
+            break;
+        }
+        buf[i++] = ch;
+        p++;
+        ch = mvinch(note->cury, note->curx + p);
+    }
+
+    int pos = get_note_on_curs(note);
+
+    for(int i = 0; i < note->content[pos]->cont_len; i++) {
+        if (!strcmp(buf, note->content[pos]->cont[i])) {
+            delete_content_helper(note, pos, i);
+            break;
+        }
+    }
 }

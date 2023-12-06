@@ -60,7 +60,7 @@ void add_notecontent(NOTE *note, char *note_name, char *content);
 void delete_note(NOTE *note);
 
 //delete content from note is pos position
-void delte_content(NOTE *note);
+void delete_content(NOTE *note);
 
 //cast all notes and content to char ** for disk writing
 char **prepare_content_for_disk(NOTE *note);

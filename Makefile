@@ -1,4 +1,4 @@
-MAIN = note
+MAIN = note.out
 CC = gcc
 LIB = -lncurses
 
