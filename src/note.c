@@ -7,19 +7,6 @@
 
 WINDOW *tmp;
 
-char *get_login_from_pwd(char *pwd) {
-    char *buf = SMAL(30);
-
-    for(int i = 6, j = 0; ; i++, j++) {
-        if(pwd[i] == '/') {
-            buf[j] = '\0';
-            return buf;
-        }
-        buf[j] = pwd[i];
-    }
-    return NULL;
-}
-
 
 NOTE *init_note() {
     NOTE *note = malloc(sizeof(*note));
@@ -37,12 +24,13 @@ NOTE *init_note() {
 
     note->total_len = 0;
     note->open_content = 0;
+    char *login = SMAL(30);
 
-    char *login = getlogin();
+    login = getlogin();
     if (login == NULL) {
-        char *cwd = SMAL(200);
-        login = get_login_from_pwd(getcwd(cwd, 200));
-        free(cwd);
+        printf("Can't find your user name, maeby you use WSL linux\n");
+        printf("Please, write your linux user name here: ");
+        scanf("%s", login);
     }
 
     char *path = SMAL(100);
@@ -63,6 +51,7 @@ NOTE *init_note() {
     note->total_len = size;
 
     free(path);
+    free(login);
     return note;
 }
 

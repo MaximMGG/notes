@@ -14,4 +14,5 @@ char **get_note_from_file(char *path, unsigned int *size);
 int save_note_in_file(char *path, char **content, int size);
 
 
+
 #endif
