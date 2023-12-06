@@ -8,6 +8,25 @@ WINDOW *tmp;
 CONFIG *cnf;
 
 
+char *login_from_tmp(char *login) {
+    system("whoami > tmp");
+    FILE *f = fopen("tmp", "r");
+    char *buf = SMAL(30);
+    memset(buf, 0, 30);
+
+    if (f == NULL) {
+        login = NULL;
+    }
+    fgets(buf, 30, f);
+    remove("tmp");
+
+    fclose(f);
+
+    return buf;
+}
+
+
+
 NOTE *init_note() {
 
     cnf = init_config();
@@ -30,13 +49,19 @@ NOTE *init_note() {
     char *login = SMAL(30);
 
     login = getlogin();
+
+    free(login);
     if (login == NULL) {
-        printf("Can't find your user name, maeby you use WSL linux\n");
-        printf("Please, write your linux user name here: ");
-        scanf("%s", login);
+        login = login_from_tmp(login);
+        login[strlen(login) - 1] = '\0';
+        if (login == NULL) {
+            fprintf(stderr, "ERROR, cant set login, please enter login here or try to reopen note with sudo");
+            scanf("%s", login);
+        }
     }
 
     char *path = SMAL(100);
+    memset(path, 0, 100);
     path = strcat(path, HOME);
     path = strcat(path, login);
     path = strcat(path, NOTE_NOT);
@@ -56,6 +81,11 @@ NOTE *init_note() {
     free(path);
     free(login);
     return note;
+}
+
+CONFIG *init_config() {
+
+    return NULL;
 }
 
 
