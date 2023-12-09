@@ -11,6 +11,9 @@
 #define NOTES 12
 #define CONTENT 13
 
+#define COLOR_ALMOND 8
+#define COLOR_HEX 9
+
 
 typedef struct {
     char type;

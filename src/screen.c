@@ -30,10 +30,10 @@ void print_content(NOTE *note) {
     color_list **cont = get_content(note);
 
     start_color();
-    init_color(COLOR_CYAN, 242, 210, 189);
-    init_pair(1, COLOR_CYAN, COLOR_BLACK);
-    init_color(COLOR_RED, 218, 247, 166);
-    init_pair(2, COLOR_RED, COLOR_BLACK);
+    init_color(COLOR_ALMOND, 851, 964, 648);
+    init_pair(1, COLOR_ALMOND, COLOR_BLACK);
+    init_color(COLOR_HEX, 914, 863, 789);
+    init_pair(2, COLOR_HEX, COLOR_BLACK);
     
 
     for(int i = note->from, j = 1; j <= note->maxy - 2 && j < note->open_content + 1; i++, j++) {
