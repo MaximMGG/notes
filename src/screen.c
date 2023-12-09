@@ -1,19 +1,24 @@
 #include "../header/screen.h"
+#include <ncurses.h>
 
 
 
 
-char **get_content(NOTE *note) {
-    char **cont = malloc(sizeof(char *) * note->open_content);
+color_list **get_content(NOTE *note) {
+    color_list **cont = malloc(sizeof(color_list *) * note->open_content);
     int count = 0;
     for(int i = 0; i < note->note_len; i++) {
-        cont[count] = malloc(sizeof(char) * strlen(note->content[i]->note_name)); 
-        strcpy(cont[count++], note->content[i]->note_name);
+        cont[count] = malloc(sizeof(color_list *));
+        cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->note_name)); 
+        cont[count]->type = NOTES;
+        strcpy(cont[count++]->cont, note->content[i]->note_name);
         if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
             for(int j = 0; j < note->content[i]->cont_len; j++) {
-                cont[count] = malloc(sizeof(char) * strlen(note->content[i]->cont[j]) + 4);
-                strcpy(cont[count], "    ");
-                strcat(cont[count++], note->content[i]->cont[j]);
+                cont[count] = malloc(sizeof(color_list *));
+                cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->cont[j]) + 4);
+                cont[count]->type = CONTENT;
+                strcpy(cont[count]->cont, "    ");
+                strcat(cont[count++]->cont, note->content[i]->cont[j]);
             }
         }
     }
@@ -22,10 +27,26 @@ char **get_content(NOTE *note) {
 
 
 void print_content(NOTE *note) {
-    char **cont = get_content(note);
+    color_list **cont = get_content(note);
+
+    start_color();
+    init_color(COLOR_CYAN, 242, 210, 189);
+    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    init_color(COLOR_RED, 218, 247, 166);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+    
 
     for(int i = note->from, j = 1; j <= note->maxy - 2 && j < note->open_content + 1; i++, j++) {
-        mvaddstr(j, 2, cont[i]);
+        if (cont[i]->type == NOTES) {
+            attron(COLOR_PAIR(1));
+            mvaddstr(j, 2, cont[i]->cont);
+            attroff(COLOR_PAIR(1));
+
+        } else {
+            attron(COLOR_PAIR(2));
+            mvaddstr(j, 2, cont[i]->cont);
+            attroff(COLOR_PAIR(2));
+        }
     }
 
     free(cont);

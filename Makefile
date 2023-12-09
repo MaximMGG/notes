@@ -1,6 +1,6 @@
 MAIN = note
 CC = gcc
-LIB = -lncurses
+LIB = -lncurses -lcursesw
 
 SRC_DR = src/
 SRCL_DR = lib/

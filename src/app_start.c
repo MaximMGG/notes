@@ -2,7 +2,6 @@
 #include "../header/screen.h"
 
 
-
 int main() {
 
     int ch;
