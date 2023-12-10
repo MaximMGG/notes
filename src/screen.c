@@ -4,7 +4,10 @@
 
 
 char **get_content(NOTE *note) {
-    char **cont = malloc(sizeof(char *) * note->open_content);
+    char **cont = (char **) malloc(sizeof(char *) * note->open_content);
+    for (int i = 0; i < note->open_content; i++) {
+        cont[i] = (char *) malloc(sizeof(char *));
+    }
     int count = 0;
     for(int i = 0; i < note->note_len; i++) {
         cont[count] = malloc(sizeof(char) * strlen(note->content[i]->note_name)); 
