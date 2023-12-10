@@ -5,16 +5,16 @@
 
 
 color_list **get_content(NOTE *note) {
-    color_list **cont = malloc(sizeof(color_list *) * note->open_content);
+    color_list **cont = (color_list **) malloc(sizeof(color_list *) * note->open_content);
     int count = 0;
     for(int i = 0; i < note->note_len; i++) {
-        cont[count] = malloc(sizeof(color_list *));
+        cont[count] = (color_list *) malloc(sizeof(color_list));
         cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->note_name)); 
         cont[count]->type = NOTES;
         strcpy(cont[count++]->cont, note->content[i]->note_name);
         if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
             for(int j = 0; j < note->content[i]->cont_len; j++) {
-                cont[count] = malloc(sizeof(color_list *));
+                cont[count] = (color_list *) malloc(sizeof(color_list));
                 cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->cont[j]) + 4);
                 cont[count]->type = CONTENT;
                 strcpy(cont[count]->cont, "    ");
