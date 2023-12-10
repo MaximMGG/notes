@@ -25,15 +25,21 @@ color_list **get_content(NOTE *note) {
     return cont;
 }
 
+void prepare_colors() {
+    init_color(COLOR_ALMOND, 851, 964, 648);
+    init_color(COLOR_HEX, 914, 863, 789);
+    init_color(COLOR_TAUPE, 281, 234, 195);
+    init_color(COLOR_BLACK, 281, 234, 195);
+    init_pair(1, COLOR_ALMOND, COLOR_BLACK);
+    init_pair(2, COLOR_HEX, COLOR_BLACK);
+    init_pair(3, COLOR_BLACK, COLOR_TAUPE);
+}
 
 void print_content(NOTE *note) {
     color_list **cont = get_content(note);
 
-    start_color();
-    init_color(COLOR_ALMOND, 851, 964, 648);
-    init_pair(1, COLOR_ALMOND, COLOR_BLACK);
-    init_color(COLOR_HEX, 914, 863, 789);
-    init_pair(2, COLOR_HEX, COLOR_BLACK);
+    // init_pair(1, COLOR_ALMOND, COLOR_BLACK);
+    // init_pair(2, COLOR_HEX, COLOR_BLACK);
     
 
     for(int i = note->from, j = 1; j <= note->maxy - 2 && j < note->open_content + 1; i++, j++) {
@@ -63,7 +69,7 @@ void reset_win(NOTE *note) {
     wclear(stdscr);
     print_content(note);
     mvaddch(note->cury, note->curx, '>');
-    box(stdscr, 0, 0);
+    box_it(stdscr, COLOR_TAUPE);
     refresh();
 }
 
@@ -122,3 +128,19 @@ void move_curs(NOTE *note, char direction) {
     }
 }
 
+void box_it(WINDOW *win, COLOR col) {
+    int y, x;
+    getmaxyx(win, y, x);
+    char *line = malloc(sizeof(char) * x + 1);
+    memset(line, 32, x);
+    line[x + 1] = '\0';
+    
+    wattron(win, COLOR_PAIR(3));
+    mvwaddstr(win, 0, 0, line);
+    mvwaddstr(win, y - 1, 0, line);
+    for(int i = 0; i < y; i++) {
+        mvwaddch(win, i, 0, ' ');
+        mvwaddch(win, i, x - 1, ' ');
+    }
+    wattroff(win, COLOR_PAIR(3));
+}

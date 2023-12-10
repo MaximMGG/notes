@@ -11,8 +11,10 @@
 #define NOTES 12
 #define CONTENT 13
 
+#define COLOR char
 #define COLOR_ALMOND 8
 #define COLOR_HEX 9
+#define COLOR_TAUPE 10
 
 
 typedef struct {
@@ -32,5 +34,11 @@ void print_content(NOTE *note);
 
 //move curs up or down
 void move_curs(NOTE *note, char direction);
+
+//paind box around window
+void box_it(WINDOW *win, COLOR col);
+
+//prepared colors
+void prepare_colors();
 
 #endif //_SCREEN_
