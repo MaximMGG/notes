@@ -18,8 +18,8 @@
 
 
 typedef struct {
-    char type;
     char *cont;
+    long type;
 } color_list;
 
 
