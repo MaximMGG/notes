@@ -16,11 +16,12 @@
 #define COLOR_HEX 9
 #define COLOR_TAUPE 10
 
-
-typedef struct {
+struct color_list_b {
     char *cont;
     long type;
-} color_list;
+};
+
+typedef struct color_list_b color_list;
 
 
 //reset window content and print content agane

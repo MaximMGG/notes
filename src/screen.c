@@ -6,20 +6,20 @@
 
 
 color_list **get_content(NOTE *note) {
-    color_list **cont = (color_list **)malloc(sizeof(color_list *) * 20);
+    color_list **cont = (color_list **)malloc(sizeof(struct color_list_b *) * note->open_content);
+    for(int i = 0; i < note->open_content; i++) {
+        cont[i] = (struct color_list_b *) malloc(sizeof(struct color_list_b));
+    }
     int count = 0;
     for(int i = 0; i < note->note_len; i++) {
-        cont[count] = (color_list *) malloc(alignof(sizeof(color_list)));
-        cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->note_name)); 
-        cont[count]->type = NOTES;
-        strcpy(cont[count++]->cont, note->content[i]->note_name);
-        if (note->content[i]->cont_len > 0 && note->content[i]->open == TRUE) {
+        cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->note_name));
+        strcpy(cont[count]->cont, note->content[i]->note_name);
+        cont[count++]->type = NOTES;
+        if (note->content[i]->open == TRUE && note->content[i]->cont_len > 0) {
             for(int j = 0; j < note->content[i]->cont_len; j++) {
-                cont[count] = (color_list *) malloc(alignof(sizeof(color_list)));
-                cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->cont[j]) + 4);
-                cont[count]->type = CONTENT;
-                strcpy(cont[count]->cont, "    ");
-                strcat(cont[count++]->cont, note->content[i]->cont[j]);
+                cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->cont[j]));
+                strcpy(cont[count]->cont, note->content[i]->cont[j]);
+                cont[count++]->type = CONTENT;
             }
         }
     }
