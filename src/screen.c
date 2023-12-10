@@ -22,6 +22,7 @@ char **get_content(NOTE *note) {
 
 
 void print_content(NOTE *note) {
+    refresh();
     char **cont = get_content(note);
 
     for(int i = note->from, j = 1; j <= note->maxy - 2 && j < note->open_content + 1; i++, j++) {
