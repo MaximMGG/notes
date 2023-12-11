@@ -7,7 +7,6 @@
 WINDOW *tmp;
 CONFIG *cnf;
 
-
 char *login_from_tmp(char *login) {
     system("whoami > tmp");
     FILE *f = fopen("tmp", "r");

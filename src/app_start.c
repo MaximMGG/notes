@@ -2,17 +2,18 @@
 #include "../header/screen.h"
 
 
-
 int main() {
 
     int ch;
 
     initscr();
+    start_color();
     raw();
     noecho();
     keypad(stdscr, TRUE);
     curs_set(0);
-    box(stdscr, 0, 0);
+    prepare_colors();
+    box_it(stdscr, COLOR_TAUPE);
 
     NOTE *note = init_note();
 
