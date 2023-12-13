@@ -5,11 +5,11 @@
 //private
 char **reset_size(char **buf, int size) {
     if (buf == NULL) {
-        buf = malloc(sizeof(char *) * size);
+        buf = (char **) malloc(sizeof(char *) * size);
         return buf;
     }
     
-    buf = realloc(buf, sizeof(char *) * size);
+    buf = (char **) realloc(buf, sizeof(char *) * size);
 
     return buf;
 }
@@ -29,12 +29,11 @@ char **get_note_from_file(char *path, unsigned int *size) {
     
     int i = 0;
     while(!feof(f)) {
-        char *buf = malloc(sizeof(char) * STR_L);
+        char buf[STR_L];
         fgets(buf, STR_L, f);
 
-        content[i] = malloc(sizeof(char) * strlen(buf));
+        content[i] = (char *) malloc(sizeof(char) * strlen(buf) + 1);
         strcpy(content[i++], buf);
-        free(buf);
 
         if (i == len) {
             len <<= 1;

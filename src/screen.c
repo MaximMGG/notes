@@ -17,8 +17,9 @@ color_list **get_content(NOTE *note) {
         cont[count++]->type = NOTES;
         if (note->content[i]->open == TRUE && note->content[i]->cont_len > 0) {
             for(int j = 0; j < note->content[i]->cont_len; j++) {
-                cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->cont[j]));
-                strcpy(cont[count]->cont, note->content[i]->cont[j]);
+                cont[count]->cont = malloc(sizeof(char) * strlen(note->content[i]->cont[j]) + 5);
+                strcpy(cont[count]->cont, "    ");
+                strcat(cont[count]->cont, note->content[i]->cont[j]);
                 cont[count++]->type = CONTENT;
             }
         }
